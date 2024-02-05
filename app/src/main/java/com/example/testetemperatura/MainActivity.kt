@@ -14,6 +14,7 @@ import com.example.testetemperatura.MainActivity.VariaveisGlobais.data
 import com.example.testetemperatura.MainActivity.VariaveisGlobais.row1
 import com.example.testetemperatura.MainActivity.VariaveisGlobais.row2
 import com.example.testetemperatura.MainActivity.VariaveisGlobais.tabela_temperatura
+//import com.example.testetemperatura.MainActivity.VariaveisGlobais.temperature
 //import com.example.testetemperatura.databinding.ActivityMainBinding
 import java.io.File
 import java.text.SimpleDateFormat
@@ -34,9 +35,9 @@ class MainActivity : AppCompatActivity() {
         lateinit var temperatureTextView: TextView
         lateinit var tabela_temperatura: TableLayout
         var row1: Array<SimpleDateFormat?> = arrayOfNulls(1)
-        var row2: Array<String?> = arrayOfNulls(1)
+        //var row2: Array<String?> = arrayOfNulls(1)
+        var row2: Array<String?> = arrayOfNulls(1)      // ESSA VARIÁVEL PRECISOU SER DECLARADA COMO GLOBAL PARA PODER ASSUMIR O VALOR DA TEMPERATURA DE DENTRO DE OUTRA FUNÇÃO
         var data = SimpleDateFormat("dd-MM-yyyy - HH:mm:ss")
-
 
     }
 
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 val temperature = intent?.getIntExtra("temperature", 0) ?: 0
                 updateTemperature(temperature)
+
             }
         }
 
@@ -100,6 +102,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateTemperature(temperature: Int) {
         val formattedTemperature = temperature / 10.0
         VariaveisGlobais.temperatureTextView.text = "Temperatura: $formattedTemperature °C"
+        row2[0] = formattedTemperature.toString()   // PASSANDO O VALOR DA TEMPERATURA PARA DENTRO DA VARIÁVEL
     }
 
     private val updateTemperatureRunnable = object : Runnable {
@@ -115,10 +118,10 @@ class MainActivity : AppCompatActivity() {
 
             //LINHA TEMPERATURA
 
-            row2[0] = VariaveisGlobais.temperatureTextView.toString()
+
             var linhaTemperatura = findViewById<TextView>(R.id.linha2)
-            val linhaTemperaturaFormatada = row2[0].toString()
-            linhaTemperatura.setText(linhaTemperaturaFormatada)
+            val linhaTemperaturaFormatada = row2[0]
+            linhaTemperatura.text = linhaTemperaturaFormatada.toString()
 
             //row1[1] = "Temperatura: "
 
