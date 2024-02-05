@@ -118,7 +118,6 @@ class MainActivity : AppCompatActivity() {
 
             //LINHA TEMPERATURA
 
-
             var linhaTemperatura = findViewById<TextView>(R.id.linha2)
             val linhaTemperaturaFormatada = row2[0]
             linhaTemperatura.text = linhaTemperaturaFormatada.toString()
