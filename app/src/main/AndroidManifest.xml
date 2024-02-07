@@ -1,10 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.testetemperatura">
-
     <!-- Permissões para acesso ao sistema de arquivos -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- Outras permissões podem ser adicionadas conforme necessário -->
 
     <application
         android:allowBackup="true"
@@ -16,25 +15,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TesteTemperatura"
         tools:targetApi="31">
-
-        <!-- Atividade principal -->
+        <activity
+            android:name=".telaLog"
+            android:exported="false"
+            android:label="@string/title_activity_tela_log"
+            android:theme="@style/Theme.TesteTemperatura" />
+        <activity
+            android:name=".TelaLog"
+            android:exported="false"
+            android:label="@string/title_activity_tela_log"
+            android:theme="@style/Theme.TesteTemperatura" /> <!-- Atividade principal -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Declarar o serviço -->
-
-            <service android:name="com.example.testetemperatura.TemperatureService" />
-
-
-
-        <!-- Outras atividades, serviços, provedores de conteúdo, etc., podem ser adicionados aqui -->
-
+        </activity> <!-- Declarar o serviço -->
+        <service android:name=".TemperatureService" />
     </application>
 
 </manifest>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGrey">
+
+
+    <TableLayout
+        android:id="@+id/tabela_temperatura"
+        android:layout_width="0dp"
+        android:layout_height="375dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="156dp"
+        android:background="@color/white"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbars="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TableRow
+
+            android:background="@color/colorYellow">
+
+            <!-- COLUNAS DA TABELA -->
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@color/colorWhite"
+                android:gravity="center_horizontal"
+                android:padding="10sp"
+                android:text="@string/col1"
+                android:textSize="14sp"
+
+                />
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@color/colorWhite"
+                android:gravity="center_horizontal"
+                android:padding="10sp"
+                android:text="@string/col2"
+                android:textSize="14sp"
+
+                />
+
+
+            <!--LINHAS DA TABELA -->
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+
+                android:id="@+id/linha1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@color/colorWhite"
+                android:gravity="center_horizontal"
+                android:padding="10sp"
+                android:textSize="14sp"
+
+                />
+
+            <TextView
+
+                android:id="@+id/linha2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@color/colorWhite"
+                android:gravity="center_horizontal"
+                android:padding="10sp"
+                android:text="@string/row2"
+                android:textSize="14sp"
+
+                />
+
+
+        </TableRow>
+        >
+
+
+        <!--FIM DAS LINHAS DA TABELA -->
+
+
+    </TableLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

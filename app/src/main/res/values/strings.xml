@@ -4,5 +4,6 @@
     <string name="col2">Temperatura</string>
     <string name="row1"></string>
     <string name="row2"></string>
+    <string name="title_activity_tela_log">TelaLog</string>
 
 </resources>

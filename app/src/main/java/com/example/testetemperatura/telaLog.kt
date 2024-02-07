@@ -25,8 +25,9 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import com.example.testetemperatura.databinding.ActivityMainBinding
+import com.example.testetemperatura.databinding.TelaLogBinding
 
-class MainActivity : AppCompatActivity() {
+class telaLog : AppCompatActivity() {
 
     private lateinit var temperatureTextView: TextView
     //private lateinit var binding: ActivityMainBinding
@@ -53,36 +54,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun trocarTela(){
-
-        val trocaTela = Intent(this, telaLog::class.java)
-        startActivity(trocaTela)
-
-    }
-
 
     // FUNÇÃO PARA PASSAR PARA A NOVA TELA QUANDO CLICAR NO BOTÃO
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.tela_log)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        val binding = TelaLogBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        VariaveisGlobais.temperatureTextView = findViewById(R.id.temperatureTextView)
+        //VariaveisGlobais.temperatureTextView = findViewById(R.id.temperatureTextView)
         estaRodando = true
-
-
-
-        //FUNÇÃO PARA TROCAR DE  TELA QUANDO CLICAR NO BOTÃO
-
-        findViewById<AppCompatButton>(R.id.botao_tela_nova).setOnClickListener{
-
-            trocarTela()
-
-        }
 
 
 
@@ -156,48 +140,47 @@ class MainActivity : AppCompatActivity() {
 
             // limpa a tabela caso ela faça 5 registros
 
-            val tabelaTemperatura = findViewById<TableLayout>(R.id.tabela_temperatura_tela_principal)
+            val tabelaTemperatura = findViewById<TableLayout>(R.id.tabela_temperatura)
             if (tabelaTemperatura.childCount >= 5) {
                 tabelaTemperatura.removeAllViews()
             }
 
 
-                // atualiza a data para cada execução do código
-                atualizarData()
+            // atualiza a data para cada execução do código
+            atualizarData()
 
-                // cria uma nova linha
-                val tableRow = TableRow(this@MainActivity)
+            // cria uma nova linha
+            val tableRow = TableRow(this@telaLog)
 
-                // cria a célula da tabela com os valores da data
-                val textViewData = TextView(this@MainActivity)
-                textViewData.text = data.format(Date())
-                textViewData.gravity = Gravity.CENTER
-                val paramsData = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
-                textViewData.layoutParams = paramsData
-                textViewData.setBackgroundResource(R.color.colorWhite)  // Adiciona fundo branco
-                textViewData.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)  // Define o tamanho do texto
-                textViewData.setTextColor(Color.BLACK)  // Define a cor do texto
-                tableRow.addView(textViewData)
+            // cria a célula da tabela com os valores da data
+            val textViewData = TextView(this@telaLog)
+            textViewData.text = data.format(Date())
+            textViewData.gravity = Gravity.CENTER
+            val paramsData = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+            textViewData.layoutParams = paramsData
+            textViewData.setBackgroundResource(R.color.colorWhite)  // Adiciona fundo branco
+            textViewData.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)  // Define o tamanho do texto
+            textViewData.setTextColor(Color.BLACK)  // Define a cor do texto
+            tableRow.addView(textViewData)
 
-                // cria a célula da tabela com os valores de temperatura
-                val textViewTemperatura = TextView(this@MainActivity)
-                textViewTemperatura.text = row2[0].toString()
-                textViewTemperatura.gravity = Gravity.CENTER
-                val paramsTemp = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
-                textViewTemperatura.layoutParams = paramsTemp
-                textViewTemperatura.setBackgroundResource(R.color.colorWhite)  // Adiciona fundo branco
-                textViewTemperatura.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)  // Define o tamanho do texto
-                textViewTemperatura.setTextColor(Color.BLACK)  // Define a cor do texto
-                tableRow.addView(textViewTemperatura)
+            // cria a célula da tabela com os valores de temperatura
+            val textViewTemperatura = TextView(this@telaLog)
+            textViewTemperatura.text = row2[0].toString()
+            textViewTemperatura.gravity = Gravity.CENTER
+            val paramsTemp = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+            textViewTemperatura.layoutParams = paramsTemp
+            textViewTemperatura.setBackgroundResource(R.color.colorWhite)  // Adiciona fundo branco
+            textViewTemperatura.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)  // Define o tamanho do texto
+            textViewTemperatura.setTextColor(Color.BLACK)  // Define a cor do texto
+            tableRow.addView(textViewTemperatura)
 
-                // adiciona a linha à tabela
-                findViewById<TableLayout>(R.id.tabela_temperatura_tela_principal).addView(tableRow)
+            // adiciona a linha à tabela
+            findViewById<TableLayout>(R.id.tabela_temperatura).addView(tableRow)
 
-                // agenda a próxima execução após o intervalo de tempo
-                handler.postDelayed(this, 10000)
+            // agenda a próxima execução após o intervalo de tempo
+            handler.postDelayed(this, 10000)
 
-                enviarAtualizacaoLogBroadcast()
-                mudaCor()
+            enviarAtualizacaoLogBroadcast()
         }
     }
 
@@ -213,20 +196,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun mudaCor(){
-
-        if (row2[0]!!.toDouble() >= 30.0){
-
-            binding.temperatureTextView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorOrange))
-
-        }
-
-        if(row2[0]!!.toDouble() >= 40.0){
-
-            binding.temperatureTextView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed))
-        }
-
-    }
 
 
 
