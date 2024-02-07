@@ -64,8 +64,9 @@ class TemperatureService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "TemperatureService destroyed")
-        unregisterReceiver(batteryReceiver)
         handler.removeCallbacks(updateTemperatureRunnable)
+        unregisterReceiver(batteryReceiver)
+
     }
 
     private val updateTemperatureRunnable = object : Runnable {

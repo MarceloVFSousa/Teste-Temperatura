@@ -7,6 +7,12 @@ android {
     namespace = "com.example.testetemperatura"
     compileSdk = 34
 
+    viewBinding{
+
+        enable = true
+
+    }
+
     defaultConfig {
         applicationId = "com.example.testetemperatura"
         minSdk = 24
@@ -15,6 +21,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {

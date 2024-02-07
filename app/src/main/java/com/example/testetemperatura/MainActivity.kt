@@ -4,21 +4,27 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.BatteryManager
 import android.os.Bundle
 import android.os.Handler
+import android.util.TypedValue
+import android.view.Gravity
 import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import com.example.testetemperatura.MainActivity.VariaveisGlobais.data
 import com.example.testetemperatura.MainActivity.VariaveisGlobais.row1
 import com.example.testetemperatura.MainActivity.VariaveisGlobais.row2
-import com.example.testetemperatura.MainActivity.VariaveisGlobais.tabela_temperatura
 //import com.example.testetemperatura.MainActivity.VariaveisGlobais.temperature
 //import com.example.testetemperatura.databinding.ActivityMainBinding
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
+import com.example.testetemperatura.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,11 +35,11 @@ class MainActivity : AppCompatActivity() {
     //VARIÁVEL BOOLEANA PRA CHECAR QUANDO O APP TÁ RODANDO PRA PODER REGISTRAR O LOG
     private var estaRodando: Boolean = false
 
-
+    private lateinit var binding: ActivityMainBinding
 
     object VariaveisGlobais {
         lateinit var temperatureTextView: TextView
-        lateinit var tabela_temperatura: TableLayout
+        //lateinit var tabela_temperatura: TableLayout
         var row1: Array<SimpleDateFormat?> = arrayOfNulls(1)
         //var row2: Array<String?> = arrayOfNulls(1)
         var row2: Array<String?> = arrayOfNulls(1)      // ESSA VARIÁVEL PRECISOU SER DECLARADA COMO GLOBAL PARA PODER ASSUMIR O VALOR DA TEMPERATURA DE DENTRO DE OUTRA FUNÇÃO
@@ -41,9 +47,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun atualizarData(){
+
+        data = SimpleDateFormat("dd-MM-yyyy - HH:mm:ss")
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         VariaveisGlobais.temperatureTextView = findViewById(R.id.temperatureTextView)
         estaRodando = true
@@ -56,6 +71,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+
 
         registerReceiver(receiver, IntentFilter("com.example.testetemperatura.UPDATE_TEMPERATURE"))
 
@@ -103,29 +119,61 @@ class MainActivity : AppCompatActivity() {
         val formattedTemperature = temperature / 10.0
         VariaveisGlobais.temperatureTextView.text = "Temperatura: $formattedTemperature °C"
         row2[0] = formattedTemperature.toString()   // PASSANDO O VALOR DA TEMPERATURA PARA DENTRO DA VARIÁVEL
+
     }
+
 
     private val updateTemperatureRunnable = object : Runnable {
         override fun run() {
             registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
-            handler.postDelayed(this, 10000)
 
-            //LINHA DATA
-            row1[0] = data
-            var linhaHorario = findViewById<TextView>(R.id.linha1)
-            val dataFormatadaLinha = row1[0]?.format(Date())
-            linhaHorario.text = dataFormatadaLinha
-
-            //LINHA TEMPERATURA
-
-            var linhaTemperatura = findViewById<TextView>(R.id.linha2)
-            val linhaTemperaturaFormatada = row2[0]
-            linhaTemperatura.text = linhaTemperaturaFormatada.toString()
-
-            //row1[1] = "Temperatura: "
+            //LIMPA A TABELA ANTES DE EXECUTAR O LOOP
 
 
-            enviarAtualizacaoLogBroadcast()
+            // limpa a tabela caso ela faça 5 registros
+
+            val tabelaTemperatura = findViewById<TableLayout>(R.id.tabela_temperatura)
+            if (tabelaTemperatura.childCount >= 12) {
+                tabelaTemperatura.removeAllViews()
+            }
+
+
+                // atualiza a data para cada execução do código
+                atualizarData()
+
+                // cria uma nova linha
+                val tableRow = TableRow(this@MainActivity)
+
+                // cria a célula da tabela com os valores da data
+                val textViewData = TextView(this@MainActivity)
+                textViewData.text = VariaveisGlobais.data.format(Date())
+                textViewData.gravity = Gravity.CENTER
+                val paramsData = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+                textViewData.layoutParams = paramsData
+                textViewData.setBackgroundResource(R.color.colorWhite)  // Adiciona fundo branco
+                textViewData.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)  // Define o tamanho do texto
+                textViewData.setTextColor(Color.BLACK)  // Define a cor do texto
+                tableRow.addView(textViewData)
+
+                // cria a célula da tabela com os valores de temperatura
+                val textViewTemperatura = TextView(this@MainActivity)
+                textViewTemperatura.text = VariaveisGlobais.row2[0].toString()
+                textViewTemperatura.gravity = Gravity.CENTER
+                val paramsTemp = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+                textViewTemperatura.layoutParams = paramsTemp
+                textViewTemperatura.setBackgroundResource(R.color.colorWhite)  // Adiciona fundo branco
+                textViewTemperatura.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)  // Define o tamanho do texto
+                textViewTemperatura.setTextColor(Color.BLACK)  // Define a cor do texto
+                tableRow.addView(textViewTemperatura)
+
+                // adiciona a linha à tabela
+                findViewById<TableLayout>(R.id.tabela_temperatura).addView(tableRow)
+
+                // agenda a próxima execução após o intervalo de tempo
+                handler.postDelayed(this, 10000)
+
+                enviarAtualizacaoLogBroadcast()
+                mudaCor()
         }
     }
 
@@ -139,6 +187,21 @@ class MainActivity : AppCompatActivity() {
         stopService(serviceIntent)
         estaRodando = false
         super.onDestroy()
+    }
+
+    private fun mudaCor(){
+
+        if (row2[0]!!.toDouble() >= 30.0){
+
+            binding.temperatureTextView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorOrange))
+
+        }
+
+        if(row2[0]!!.toDouble() >= 40.0){
+
+            binding.temperatureTextView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed))
+        }
+
     }
 
 
