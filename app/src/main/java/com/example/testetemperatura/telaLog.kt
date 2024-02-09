@@ -1,6 +1,7 @@
 package com.example.testetemperatura
 
 import android.content.BroadcastReceiver
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -8,6 +9,7 @@ import android.graphics.Color
 import android.os.BatteryManager
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TableLayout
@@ -63,7 +65,7 @@ class telaLog : AppCompatActivity() {
         setContentView(R.layout.tela_log)
 
         val binding = TelaLogBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        //setContentView(binding.root)
 
         //VariaveisGlobais.temperatureTextView = findViewById(R.id.temperatureTextView)
         estaRodando = true
@@ -97,7 +99,7 @@ class telaLog : AppCompatActivity() {
         super.onResume()
 
         // Registra o receiver quando a atividade está visível
-        registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        //registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
 
         // Inicia a atualização da temperatura
         handler.postDelayed(updateTemperatureRunnable, 10000)
@@ -190,6 +192,13 @@ class telaLog : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        try {
+            unregisterReceiver(batteryReceiver)
+        } catch (e: IllegalArgumentException) {
+            // Lidar com a exceção caso o receiver não esteja registrado
+            Log.e(TAG, "Error unregistering receiver", e)
+        }
+
         val serviceIntent = Intent(this, TemperatureService::class.java)
         stopService(serviceIntent)
         estaRodando = false

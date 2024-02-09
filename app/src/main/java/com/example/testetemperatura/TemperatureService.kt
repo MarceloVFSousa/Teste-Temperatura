@@ -64,8 +64,19 @@ class TemperatureService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "TemperatureService destroyed")
+
+        // Remove o callback para interromper a atualização da temperatura
         handler.removeCallbacks(updateTemperatureRunnable)
-        unregisterReceiver(batteryReceiver)
+
+        try {
+            // Certifique-se de que o receiver está registrado antes de tentar desregistrá-lo
+            if (estaRodando) {
+                unregisterReceiver(batteryReceiver)
+            }
+        } catch (e: IllegalArgumentException) {
+            // Ignora a exceção se o receiver não estiver registrado
+            Log.e(TAG, "Receiver not registered.", e)
+        }
 
     }
 
