@@ -62,10 +62,10 @@ class telaLog : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.tela_log)
+        //setContentView(R.layout.tela_log)
 
         val binding = TelaLogBinding.inflate(layoutInflater)
-        //setContentView(binding.root)
+        setContentView(binding.root)
 
         //VariaveisGlobais.temperatureTextView = findViewById(R.id.temperatureTextView)
         estaRodando = true
@@ -99,7 +99,7 @@ class telaLog : AppCompatActivity() {
         super.onResume()
 
         // Registra o receiver quando a atividade está visível
-        //registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
 
         // Inicia a atualização da temperatura
         handler.postDelayed(updateTemperatureRunnable, 10000)
@@ -120,10 +120,13 @@ class telaLog : AppCompatActivity() {
 
     private val batteryReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            val temperature = intent?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0
-            updateTemperature(temperature)
+            if (intent?.action == Intent.ACTION_BATTERY_CHANGED) {
+                val temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0)
+                updateTemperature(temperature)
+            }
         }
     }
+
 
     private fun updateTemperature(temperature: Int) {
         val formattedTemperature = temperature / 10.0

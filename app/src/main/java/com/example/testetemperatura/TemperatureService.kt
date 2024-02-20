@@ -45,7 +45,7 @@ class TemperatureService : Service() {
 
 
 
-        //registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         //handler.postDelayed(updateTemperatureRunnable, 5000)
     }
 
